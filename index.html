@@ -27,8 +27,8 @@
             <form action="#">
               <div class="row">
                 <div class="col-full checklist">
-                  <select name="days of week" id="select-day">
-                    <option value="Day of the week">Day of the week</option>
+                  <select name="days-of-week" id="select-day">
+                    <!-- <option value="Day of the week">Day of the week</option> -->
                     <option value="monday">Monday</option>
                     <option value="tuesday">Tuesday</option>
                     <option value="wednesday">Wednesday</option>
@@ -43,7 +43,7 @@
               <div class="row">
                 <div class="col-full notes">
                   <textarea
-                    name=""
+                    name="notes"
                     id=""
                     cols="30"
                     rows="10"
@@ -69,13 +69,13 @@
       </div>
       <div class="row">
         <div class="col-full views">
-          <a> Sunday </a>
-          <a> Monday </a>
-          <a> Tuesday </a>
-          <a> Wednesday </a>
-          <a> Thursday </a>
-          <a> Friday </a>
-          <a> Saturday </a>
+          <a class="view-change" data-day="Sunday"> Sunday </a>
+          <a class="view-change" data-day="Monday"> Monday </a>
+          <a class="view-change" data-day="Tuesday"> Tuesday </a>
+          <a class="view-change" data-day="Wednesday"> Wednesday </a>
+          <a class="view-change" data-day="Thursday"> Thursday </a>
+          <a class="view-change" data-day="Friday"> Friday </a>
+          <a class="view-change" data-day="Saturday"> Saturday </a>
         </div>
       </div>
       <div class="row">
@@ -88,7 +88,7 @@
       <div class="row">
         <div class="col-full">
           <div class="scheduled-events">
-            <p class="header">Scheduled Events for Monday</p>
+            <p class="header">Scheduled Events for <span id="day-of-the-week"></span></p>
           </div>
         </div>
       </div>
