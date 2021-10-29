@@ -18,19 +18,20 @@ const data = {
   Wednesday: [],
   Thursday: [],
   Friday: [],
-  Saturday: []
+  Saturday: [],
+  nextEntryId: 1
 };
 /*
 {
   time: null,
-  description
+  description,
+  entryId:1++,
 }
 */
 
 $addEntryButton.addEventListener('click', event => {
   $modalBg.classList.remove('hidden');
   $spanEntryType.textContent = event.target.getAttribute('data-entry-type');
-
 });
 
 $tbody.addEventListener('click', event => {
@@ -39,18 +40,34 @@ $tbody.addEventListener('click', event => {
   }
   $modalBg.classList.remove('hidden');
   $spanEntryType.textContent = event.target.getAttribute('data-entry-type');
-  $addTime.value = data[data.currentDay].time;
-  $notes.value = data[data.currentDay].description;
 
+  const index = findEntryId(event.target.getAttribute('data-id'));
+
+  $addTime.value = data[data.currentDay][index].time;
+  $notes.value = data[data.currentDay][index].description;
 });
+
+function findEntryId(id) {
+  for (let i = 0; i < data[data.currentDay].length; i++) {
+    if (id === data[data.currentDay][i].entryId.toString()) {
+      return i;
+    }
+  }
+  return null;
+}
 
 $entryForm.addEventListener('submit', event => {
   data[$daysOfWeek.value].push({
     time: $addTime.value,
-    description: $notes.value
+    description: $notes.value,
+    entryId: data.nextEntryId++
   });
   if ($daysOfWeek.value === data.currentDay) {
-    const $tr = renderTableEntry($addTime.value, $notes.value);
+    const $tr = renderTableEntry(
+      $addTime.value,
+      $notes.value,
+      data.nextEntryId - 1
+    );
     $tbody.appendChild($tr);
   }
   $modalBg.classList.add('hidden');
@@ -74,7 +91,7 @@ $views.addEventListener('click', event => {
     tr.remove();
   }
   for (const entry of data[data.currentDay]) {
-    const $tr = renderTableEntry(entry.time, entry.description);
+    const $tr = renderTableEntry(entry.time, entry.description, entry.entryId);
     $tbody.appendChild($tr);
   }
 });
@@ -92,7 +109,7 @@ function createTimeSelect() {
   }
 }
 
-function renderTableEntry(time, description) {
+function renderTableEntry(time, description, id) {
   const $tr = document.createElement('tr');
 
   const $tdTime = document.createElement('td');
@@ -102,6 +119,7 @@ function renderTableEntry(time, description) {
   $tdDescription.textContent = description;
 
   const $updateButton = document.createElement('button');
+  $updateButton.setAttribute('data-id', id);
   $updateButton.classList.add('update');
   $updateButton.setAttribute('data-entry-type', 'Update');
   $updateButton.textContent = 'Update';
