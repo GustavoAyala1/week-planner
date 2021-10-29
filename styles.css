@@ -11,8 +11,7 @@ body {
 
 .modal-bg {
   position: absolute;
-  background-color: black;
-  opacity: 60%;
+  background-color: rgba(0, 0, 0, 0.6);
   top: 0;
   left: 0;
   bottom: 0;
@@ -54,4 +53,25 @@ body {
 button {
   border: 3px solid black;
   box-shadow: 3px 5px 0 black;
+}
+
+select {
+  border: 3px solid black;
+  margin-right: 2%;
+}
+
+.views {
+  justify-content: space-evenly;
+}
+
+.views a {
+  text-align: center;
+  padding: 2rem 1rem;
+  border: 3px solid black;
+  font-size: 2rem;
+  transition: background-color 500ms;
+}
+
+.views a:hover {
+  background-color: rgba(128, 128, 128, 0.5);
 }
