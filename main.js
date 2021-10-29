@@ -19,7 +19,8 @@ const data = {
   Thursday: [],
   Friday: [],
   Saturday: [],
-  nextEntryId: 1
+  nextEntryId: 1,
+  editing: null
 };
 /*
 {
@@ -35,44 +36,56 @@ $addEntryButton.addEventListener('click', event => {
 });
 
 $tbody.addEventListener('click', event => {
-  if (event.target.getAttribute('data-entry-type') !== 'Update') {
-    return;
+  if (event.target.getAttribute('data-entry-type') === 'Update') {
+    $modalBg.classList.remove('hidden');
+    $spanEntryType.textContent = event.target.getAttribute('data-entry-type');
+
+    const index = findEntryId(event.target.getAttribute('data-id'));
+
+    $daysOfWeek.value = data.currentDay;
+    $addTime.value = data[data.currentDay][index].time;
+    $notes.value = data[data.currentDay][index].description;
+    data.editing = index;
   }
-  $modalBg.classList.remove('hidden');
-  $spanEntryType.textContent = event.target.getAttribute('data-entry-type');
-
-  const index = findEntryId(event.target.getAttribute('data-id'));
-
-  $addTime.value = data[data.currentDay][index].time;
-  $notes.value = data[data.currentDay][index].description;
 });
 
-function findEntryId(id) {
-  for (let i = 0; i < data[data.currentDay].length; i++) {
-    if (id === data[data.currentDay][i].entryId.toString()) {
-      return i;
-    }
-  }
-  return null;
-}
-
 $entryForm.addEventListener('submit', event => {
-  data[$daysOfWeek.value].push({
-    time: $addTime.value,
-    description: $notes.value,
-    entryId: data.nextEntryId++
-  });
-  if ($daysOfWeek.value === data.currentDay) {
-    const $tr = renderTableEntry(
-      $addTime.value,
-      $notes.value,
-      data.nextEntryId - 1
-    );
-    $tbody.appendChild($tr);
+  event.preventDefault();
+  if (data.editing === null) {
+    data[$daysOfWeek.value].push({
+      time: $addTime.value,
+      description: $notes.value,
+      entryId: data.nextEntryId++
+    });
+    if ($daysOfWeek.value === data.currentDay) {
+      const $tr = renderTableEntry(
+        $addTime.value,
+        $notes.value,
+        data.nextEntryId - 1
+      );
+      $tbody.appendChild($tr);
+    }
+  } else {
+    const index = data.editing;
+    const currentDay = data.currentDay;
+    data[currentDay][index].time = $addTime.value;
+    data[currentDay][index].description = $notes.value;
+    const $tr = document.querySelector(`tr[data-id="${data[currentDay][index].entryId}"]`);
+    $tr.remove();
+    let entry = null;
+    if (currentDay !== $daysOfWeek.value) {
+      entry = data[currentDay].splice(index, 1)[0];
+      data[$daysOfWeek.value].push(entry);
+    } else {
+      entry = data[currentDay][index];
+    }
+
+    const $newTr = renderTableEntry(entry.time, entry.description, entry.entryId);
+    $tbody.append($newTr);
+    data.editing = null;
   }
   $modalBg.classList.add('hidden');
   $entryForm.reset();
-  event.preventDefault();
 });
 
 window.addEventListener('DOMContentLoaded', event => {
@@ -97,10 +110,6 @@ $views.addEventListener('click', event => {
 });
 
 function createTimeSelect() {
-  // const $optionDefault = document.createElement('option');
-  // $optionDefault.setAttribute('value', 'default');
-  // $optionDefault.textContent = 'Time';
-  // $timeSelect.prepend($optionDefault);
   for (let i = 0; i <= 23; i++) {
     const $option = document.createElement('option');
     $option.setAttribute('value', i);
@@ -111,6 +120,7 @@ function createTimeSelect() {
 
 function renderTableEntry(time, description, id) {
   const $tr = document.createElement('tr');
+  $tr.setAttribute('data-id', id);
 
   const $tdTime = document.createElement('td');
   $tdTime.textContent = time + ':00';
@@ -134,6 +144,15 @@ function renderTableEntry(time, description, id) {
   $tr.appendChild($tdTime);
   $tr.appendChild($tdDescription);
   return $tr;
+}
+
+function findEntryId(id) {
+  for (let i = 0; i < data[data.currentDay].length; i++) {
+    if (id === data[data.currentDay][i].entryId.toString()) {
+      return i;
+    }
+  }
+  return null;
 }
 
 /* <tr>
