@@ -70,18 +70,35 @@ $entryForm.addEventListener('submit', event => {
     const currentDay = data.currentDay;
     data[currentDay][index].time = $addTime.value;
     data[currentDay][index].description = $notes.value;
-    const $tr = document.querySelector(`tr[data-id="${data[currentDay][index].entryId}"]`);
-    $tr.remove();
+    // const $tr = document.querySelector(
+    //   `tr[data-id="${data[currentDay][index].entryId}"]`
+    // );
+
+    // $tr.remove();
     let entry = null;
-    if (currentDay !== $daysOfWeek.value) {
-      entry = data[currentDay].splice(index, 1)[0];
-      data[$daysOfWeek.value].push(entry);
-    } else {
-      entry = data[currentDay][index];
+
+    entry = data[currentDay].splice(index, 1)[0];
+    data[$daysOfWeek.value].push(entry);
+
+    const $trs = document.querySelectorAll('tbody tr');
+    for (const tr of $trs) {
+      tr.remove();
+    }
+    for (const entry of data[data.currentDay]) {
+      const $tr = renderTableEntry(
+        entry.time,
+        entry.description,
+        entry.entryId
+      );
+      $tbody.appendChild($tr);
     }
 
-    const $newTr = renderTableEntry(entry.time, entry.description, entry.entryId);
-    $tbody.append($newTr);
+    // const $newTr = renderTableEntry(
+    //   entry.time,
+    //   entry.description,
+    //   entry.entryId
+    // );
+    // $tbody.append($newTr);
     data.editing = null;
   }
   $modalBg.classList.add('hidden');
