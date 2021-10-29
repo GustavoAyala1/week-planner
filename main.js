@@ -4,7 +4,7 @@ const $timeSelect = document.querySelector('#add-time');
 const $scheduledEventsText = document.querySelector('#day-of-the-week');
 const $views = document.querySelector('.views');
 const $entryForm = document.querySelector('form');
-// const $daysOfWeek = $entryForm.elements['days-of-week'];
+const $daysOfWeek = $entryForm.elements['days-of-week'];
 const $addTime = $entryForm.elements.time;
 const $notes = $entryForm.elements.notes;
 const $tbody = document.querySelector('tbody');
@@ -31,8 +31,14 @@ $addEntryButton.addEventListener('click', event => {
 });
 
 $entryForm.addEventListener('submit', event => {
-  const $tr = renderTableEntry();
-  $tbody.appendChild($tr);
+  data[$daysOfWeek.value].push({
+    time: $addTime.value,
+    description: $notes.value
+  });
+  if ($daysOfWeek.value === data.currentDay) {
+    const $tr = renderTableEntry($addTime.value, $notes.value);
+    $tbody.appendChild($tr);
+  }
   $modalBg.classList.add('hidden');
   $entryForm.reset();
   event.preventDefault();
@@ -53,6 +59,14 @@ $views.addEventListener('click', event => {
   }
   data.currentDay = event.target.getAttribute('data-day');
   $scheduledEventsText.textContent = data.currentDay;
+  const $trs = document.querySelectorAll('tbody tr');
+  for (const tr of $trs) {
+    tr.remove();
+  }
+  for (const entry of data[data.currentDay]) {
+    const $tr = renderTableEntry(entry.time, entry.description);
+    $tbody.appendChild($tr);
+  }
 });
 
 function createTimeSelect() {
@@ -68,14 +82,14 @@ function createTimeSelect() {
   }
 }
 
-function renderTableEntry() {
+function renderTableEntry(time, description) {
   const $tr = document.createElement('tr');
 
   const $tdTime = document.createElement('td');
-  $tdTime.textContent = $addTime.value + ':00';
+  $tdTime.textContent = time + ':00';
 
   const $tdDescription = document.createElement('td');
-  $tdDescription.textContent = $notes.value;
+  $tdDescription.textContent = description;
 
   $tr.appendChild($tdTime);
   $tr.appendChild($tdDescription);
