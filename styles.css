@@ -1,0 +1,57 @@
+body {
+  font-family: "Roboto", sans-serif;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+.submit {
+  justify-content: end;
+}
+
+.modal-bg {
+  position: absolute;
+  background-color: black;
+  opacity: 60%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modal-add-entry {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  width: 800px;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.modal-add-entry .row {
+  margin-bottom: 20px;
+}
+
+.checklist {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.notes textarea {
+  width: 600px;
+  border: 3px solid black;
+}
+
+.header {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+button {
+  border: 3px solid black;
+  box-shadow: 3px 5px 0 black;
+}
