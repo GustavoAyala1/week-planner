@@ -75,3 +75,33 @@ select {
 .views a:hover {
   background-color: rgba(128, 128, 128, 0.5);
 }
+
+.add-entry-button {
+  padding: 1rem 5rem;
+  background-color: white;
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+}
+
+table {
+  border: 2px solid black;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+tr > *:nth-child(1) {
+  border-right: 2px solid black;
+  width: 30%;
+}
+
+th {
+  background-color: rgba(128, 128, 128, 0.664);
+}
+
+tbody tr:nth-child(odd) {
+  background-color: rgba(211, 211, 211, 0.452);
+}
+
+.table-div {
+  padding: 0 5rem;
+}
