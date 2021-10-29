@@ -8,6 +8,7 @@ const $daysOfWeek = $entryForm.elements['days-of-week'];
 const $addTime = $entryForm.elements.time;
 const $notes = $entryForm.elements.notes;
 const $tbody = document.querySelector('tbody');
+const $spanEntryType = document.querySelector('#entry-type');
 
 const data = {
   currentDay: 'Monday',
@@ -28,6 +29,19 @@ const data = {
 
 $addEntryButton.addEventListener('click', event => {
   $modalBg.classList.remove('hidden');
+  $spanEntryType.textContent = event.target.getAttribute('data-entry-type');
+
+});
+
+$tbody.addEventListener('click', event => {
+  if (event.target.getAttribute('data-entry-type') !== 'Update') {
+    return;
+  }
+  $modalBg.classList.remove('hidden');
+  $spanEntryType.textContent = event.target.getAttribute('data-entry-type');
+  $addTime.value = data[data.currentDay].time;
+  $notes.value = data[data.currentDay].description;
+
 });
 
 $entryForm.addEventListener('submit', event => {
@@ -43,10 +57,6 @@ $entryForm.addEventListener('submit', event => {
   $entryForm.reset();
   event.preventDefault();
 });
-// <!-- <tr>
-//                 <td>9:00</td>
-//                 <td>Meeting with Brett</td>
-//               </tr> -->
 
 window.addEventListener('DOMContentLoaded', event => {
   createTimeSelect();
@@ -91,7 +101,24 @@ function renderTableEntry(time, description) {
   const $tdDescription = document.createElement('td');
   $tdDescription.textContent = description;
 
+  const $updateButton = document.createElement('button');
+  $updateButton.classList.add('update');
+  $updateButton.setAttribute('data-entry-type', 'Update');
+  $updateButton.textContent = 'Update';
+
+  const $deleteButton = document.createElement('button');
+  $deleteButton.classList.add('delete');
+  $deleteButton.setAttribute('data-entry-type', 'Delete');
+  $deleteButton.textContent = 'Delete';
+
+  $tdDescription.appendChild($updateButton);
+  $tdDescription.appendChild($deleteButton);
   $tr.appendChild($tdTime);
   $tr.appendChild($tdDescription);
   return $tr;
 }
+
+/* <tr>
+  <td>9:00</td>
+  <td>Meeting with Brett <button class="update" data-entry-type="Update">Update</button><button class="delete" data-entry-type="Delete">Delete</button></td>
+</tr> */

@@ -21,7 +21,7 @@
           <div class="col-full modal-add-entry">
             <div class="row">
               <div class="col-full">
-                <p class="header">Add Entry</p>
+                <p class="header"><span id="entry-type"></span> Entry</p>
               </div>
             </div>
             <form action="#">
@@ -81,7 +81,7 @@
       <div class="row">
         <div class="col-full">
           <div class="add-entry">
-            <button class="add-entry-button">Add Entry</button>
+            <button class="add-entry-button" data-entry-type="Add">Add Entry</button>
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@
             <tbody>
               <!-- <tr>
                 <td>9:00</td>
-                <td>Meeting with Brett</td>
+                <td>Meeting with Brett <button class="update" data-entry-type="Update">Update</button><button class="delete" data-entry-type="Delete">Delete</button></td>
               </tr> -->
             </tbody>
           </table>

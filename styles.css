@@ -20,6 +20,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  z-index: 2;
 }
 
 .modal-add-entry {
@@ -87,6 +88,7 @@ table {
   border: 2px solid black;
   border-collapse: collapse;
   width: 100%;
+  text-align: left;
 }
 
 tr > *:nth-child(1) {
@@ -104,4 +106,27 @@ tbody tr:nth-child(odd) {
 
 .table-div {
   padding: 0 5rem;
+}
+
+td {
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.update {
+  right: 20rem;
+  background-color: cornflowerblue;
+}
+
+.update,
+.delete {
+  position: absolute;
+  top: 0.1rem;
+  padding: 0.2rem 2rem;
+  color: white;
+}
+
+.delete {
+  right: 10rem;
+  background-color: red;
 }
