@@ -11,7 +11,7 @@ const $tbody = document.querySelector('tbody');
 const $spanEntryType = document.querySelector('#entry-type');
 const $modalDelete = document.querySelector('.modal-delete');
 
-const data = {
+let data = {
   currentDay: 'Monday',
   Sunday: [],
   Monday: [],
@@ -30,6 +30,16 @@ const data = {
   entryId:1++,
 }
 */
+const previousDataJSON = localStorage.getItem('calendar-data');
+if (previousDataJSON) {
+  data = JSON.parse(previousDataJSON);
+}
+
+window.addEventListener('beforeunload', () => {
+  data.currentDay = 'Monday';
+  const dataJSON = JSON.stringify(data);
+  localStorage.setItem('calendar-data', dataJSON);
+});
 
 $addEntryButton.addEventListener('click', event => {
   $modalBg.classList.remove('hidden');
@@ -129,6 +139,10 @@ $entryForm.addEventListener('submit', event => {
 window.addEventListener('DOMContentLoaded', event => {
   createTimeSelect();
   $scheduledEventsText.textContent = data.currentDay;
+  for (const entry of data[data.currentDay]) {
+    const $tr = renderTableEntry(entry.time, entry.description, entry.entryId);
+    $tbody.appendChild($tr);
+  }
 });
 
 $views.addEventListener('click', event => {
