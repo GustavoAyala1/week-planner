@@ -9,6 +9,7 @@ const $addTime = $entryForm.elements.time;
 const $notes = $entryForm.elements.notes;
 const $tbody = document.querySelector('tbody');
 const $spanEntryType = document.querySelector('#entry-type');
+const $modalDelete = document.querySelector('.modal-delete');
 
 const data = {
   currentDay: 'Monday',
@@ -39,13 +40,43 @@ $tbody.addEventListener('click', event => {
   if (event.target.getAttribute('data-entry-type') === 'Update') {
     $modalBg.classList.remove('hidden');
     $spanEntryType.textContent = event.target.getAttribute('data-entry-type');
-
     const index = findEntryId(event.target.getAttribute('data-id'));
 
     $daysOfWeek.value = data.currentDay;
     $addTime.value = data[data.currentDay][index].time;
     $notes.value = data[data.currentDay][index].description;
     data.editing = index;
+  } else if (event.target.getAttribute('data-entry-type') === 'Delete') {
+    $modalDelete.classList.remove('hidden');
+    const index = findEntryId(event.target.getAttribute('data-id'));
+
+    $daysOfWeek.value = data.currentDay;
+    $addTime.value = data[data.currentDay][index].time;
+    $notes.value = data[data.currentDay][index].description;
+    data.editing = index;
+  }
+});
+
+$modalDelete.addEventListener('click', event => {
+  if (event.target.matches('.delete-no')) {
+    $modalDelete.classList.add('hidden');
+  } else if (event.target.matches('.delete-yes')) {
+    const index = data.editing;
+    data[data.currentDay].splice(index, 1);
+    $modalDelete.classList.add('hidden');
+
+    const $trs = document.querySelectorAll('tbody tr');
+    for (const tr of $trs) {
+      tr.remove();
+    }
+    for (const entry of data[data.currentDay]) {
+      const $tr = renderTableEntry(
+        entry.time,
+        entry.description,
+        entry.entryId
+      );
+      $tbody.appendChild($tr);
+    }
   }
 });
 
@@ -70,11 +101,7 @@ $entryForm.addEventListener('submit', event => {
     const currentDay = data.currentDay;
     data[currentDay][index].time = $addTime.value;
     data[currentDay][index].description = $notes.value;
-    // const $tr = document.querySelector(
-    //   `tr[data-id="${data[currentDay][index].entryId}"]`
-    // );
 
-    // $tr.remove();
     let entry = null;
 
     entry = data[currentDay].splice(index, 1)[0];
@@ -93,12 +120,6 @@ $entryForm.addEventListener('submit', event => {
       $tbody.appendChild($tr);
     }
 
-    // const $newTr = renderTableEntry(
-    //   entry.time,
-    //   entry.description,
-    //   entry.entryId
-    // );
-    // $tbody.append($newTr);
     data.editing = null;
   }
   $modalBg.classList.add('hidden');
@@ -155,6 +176,7 @@ function renderTableEntry(time, description, id) {
   $deleteButton.classList.add('delete');
   $deleteButton.setAttribute('data-entry-type', 'Delete');
   $deleteButton.textContent = 'Delete';
+  $deleteButton.setAttribute('data-id', id);
 
   $tdDescription.appendChild($updateButton);
   $tdDescription.appendChild($deleteButton);
@@ -171,8 +193,3 @@ function findEntryId(id) {
   }
   return null;
 }
-
-/* <tr>
-  <td>9:00</td>
-  <td>Meeting with Brett <button class="update" data-entry-type="Update">Update</button><button class="delete" data-entry-type="Delete">Delete</button></td>
-</tr> */

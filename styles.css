@@ -23,6 +23,21 @@ body {
   z-index: 2;
 }
 
+.modal-delete {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.6);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 2;
+  text-align: center;
+}
+
 .modal-add-entry {
   display: flex;
   flex-direction: column;
@@ -129,4 +144,29 @@ td {
 .delete {
   right: 10rem;
   background-color: red;
+}
+
+.delete-yes,
+.delete-no {
+  padding: 0.2rem 1rem;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.delete-yes {
+  left: 30%;
+}
+
+.delete-no {
+  right: 30%;
+}
+
+.delete-yes:hover,
+.delete-no:hover {
+  background-color: cornflowerblue;
+  cursor: pointer;
+}
+
+.delete-header {
+  font-weight: bold;
 }
